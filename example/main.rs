@@ -2,14 +2,16 @@ extern crate utility;
 
 use utility::FieldsFromStrings;
 
-#[derive(FieldsFromStrings, Debug)]
+#[derive(FieldsFromStrings, Debug, Default)]
 struct Test {
     a: i32,
     b: i32,
+    string: String,
+    double: f64,
 }
 
 fn main() {
-    let mut t = Test { a: 1, b: 2 };
+    let mut t: Test = Default::default();
 
     for line in std::io::stdin().lines() {
         if let Ok(line) = line {
