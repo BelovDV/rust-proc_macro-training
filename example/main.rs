@@ -1,6 +1,6 @@
-extern crate utility;
+pub mod tests;
 
-use utility::FieldsFromStrings;
+use reflection::*;
 
 #[derive(FieldsFromStrings, Debug, Default)]
 struct Test {
