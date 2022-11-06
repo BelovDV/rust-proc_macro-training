@@ -1,4 +1,4 @@
-use reflection_proc::*;
+use reflection::*;
 
 #[test]
 fn test_struct_fields_set() {
