@@ -8,14 +8,14 @@ struct Inner {
     d: f64,
 }
 
-#[derive(Debug, Default, Reflection)]
+#[derive(Debug, Default, Reflection, UpdateWithStr)]
 struct Test {
     a: i32,
     b: i32,
     string: String,
     double: f64,
 
-    rec: Box<Option<Test>>,
+    // rec: Box<Option<Test>>,
 
     inner: Inner,
 }
@@ -34,14 +34,14 @@ fn main() {
     let f = t.get_field("rec");
     dbg!(&f);
     println!();
-    match f {
-        ReflectionTestFields::rec(r) => *r = Box::new(Some(Default::default())),
-        _ => {}
-    }
     let f = t.get_field("rec");
     dbg!(f);
     println!();
     dbg!(&t);
     println!();
     dbg!(t.get_field_list());
+    dbg!(&t);
+    t.update_with_str("inner abc d").unwrap();
+    t.update_with_str("string abc").unwrap();
+    dbg!(&t);
 }
