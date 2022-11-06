@@ -24,6 +24,13 @@ dependencies = [
 name = "reflection"
 version = "0.1.0"
 dependencies = [
+ "reflection-proc",
+]
+
+[[package]]
+name = "reflection-proc"
+version = "0.1.0"
+dependencies = [
  "proc-macro2",
  "quote",
  "syn",

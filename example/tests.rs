@@ -1,6 +1,8 @@
+use reflection_proc::*;
+
 #[test]
 fn test_struct_fields_set() {
-    #[derive(super::FieldsFromStrings, Default)]
+    #[derive(FieldsFromStrings, Default)]
     struct TestS {
         a: i32,
         b: i32,
@@ -21,7 +23,7 @@ fn test_struct_fields_set() {
     assert!(t.set_from_string("a", "b") == Err("invalid digit found in string".to_string()));
 }
 
-#[derive(super::EnumFromStrings, PartialEq)]
+#[derive(EnumFromStrings, PartialEq)]
 enum TestE {
     A,
     B,

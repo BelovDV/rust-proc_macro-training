@@ -4,13 +4,10 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-syn = { version = "1.0", features = ["full", "extra-traits"] }
-quote = "1.0"
-proc-macro2 = "1.0"
+reflection-proc = { path = "reflection-proc" }
 
 [lib]
 name = "reflection"
-proc-macro = true
 
 [[bin]]
 name = "example"
