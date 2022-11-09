@@ -1,5 +1,5 @@
 use proc_macro::TokenStream;
-use syn::{DataStruct, Ident, Type};
+use syn::{DataStruct, Ident};
 
 pub fn generate(ident: Ident, s: DataStruct) -> TokenStream {
     let DataStruct { fields, .. } = s;
@@ -41,13 +41,12 @@ pub fn generate(ident: Ident, s: DataStruct) -> TokenStream {
 #[derive(Debug, Clone)]
 struct Field {
     id: Ident,
-    ty: Type,
 }
 
 impl Field {
     fn try_from(f: syn::Field) -> Option<Self> {
         match f.ident.clone() {
-            Some(id) => Some(Field { id, ty: f.ty }),
+            Some(id) => Some(Field { id }),
             None => None,
         }
     }
