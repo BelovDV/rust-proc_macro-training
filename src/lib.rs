@@ -6,7 +6,8 @@ pub trait Reflection<'a> {
     type Field;
 
     fn get_field(&'a mut self, name: &str) -> Self::Field;
-    fn get_field_list(&self) -> Vec<String>;
+    fn get_field_string(&self, name: &str) -> Result<String, ()>;
+    fn get_field_list() -> Vec<String>;
 }
 
 pub trait UpdateWithStr {

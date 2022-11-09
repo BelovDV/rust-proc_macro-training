@@ -8,14 +8,14 @@ pub fn generate(ident: Ident, s: DataStruct) -> TokenStream {
         .into_iter()
         .filter_map(|f| Field::try_from(f))
         .collect();
-    let res_ty = named.iter().map(|f| f.ty.clone()).collect::<Vec<_>>();
-    let res_ident = named.iter().map(|f| f.id.clone()).collect::<Vec<_>>();
-    let res_ident_str = named.iter().map(|f| f.id.to_string()).collect::<Vec<_>>();
+    let res_ty: Vec<_> = named.iter().map(|f| f.ty.clone()).collect();
+    let res_ident: Vec<_> = named.iter().map(|f| f.id.clone()).collect();
+    let res_ident_str: Vec<_> = named.iter().map(|f| f.id.to_string()).collect();
 
     let res_ident_types = format_ident!("Reflection{}Fields", ident.to_string());
-    let res = quote::quote!(
+    quote::quote!(
         #[derive(Debug)]
-        enum #res_ident_types<'a> {
+        pub enum #res_ident_types<'a> {
             ErrorType,
             #(
                 #[allow(non_camel_case_types)]
@@ -33,13 +33,19 @@ pub fn generate(ident: Ident, s: DataStruct) -> TokenStream {
                 }
             }
 
-            fn get_field_list(&self) -> Vec<String> {
+            fn get_field_string(&self, name: &str) -> Result<String, ()> {
+                match name {
+                    #(#res_ident_str => Ok(format!("{:?}", self.#res_ident)),)*
+                    _ => Err(()),
+                }
+            }
+
+            fn get_field_list() -> Vec<String> {
                 vec![#(#res_ident_str.to_string()),*]
             }
         }
-    );
-    dbg!(res.to_string());
-    res.into()
+    )
+    .into()
 }
 
 #[derive(Debug, Clone)]
