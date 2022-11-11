@@ -10,7 +10,7 @@ pub fn generate(ident: Ident, s: DataStruct) -> TokenStream {
     let res_ident = named.iter().map(|f| f.id.clone()).collect::<Vec<_>>();
     let res_ident_str = named.iter().map(|f| f.id.to_string()).collect::<Vec<_>>();
 
-    let res = quote::quote!(
+    quote::quote!(
         impl UpdateWithStr for #ident {
             type Err = String;
 
@@ -31,11 +31,7 @@ pub fn generate(ident: Ident, s: DataStruct) -> TokenStream {
                 }
             }
         }
-    );
-    println!("\n\n\n");
-    dbg!(res.to_string());
-    println!("\n\n\n");
-    res.into()
+    ).into()
 }
 
 #[derive(Debug, Clone)]

@@ -16,30 +16,16 @@ struct Test {
     double: f64,
 
     // rec: Box<Option<Test>>,
-
     inner: Inner,
 }
-
-fn _vsp(_a: &mut dyn Reflection<Field = <Test as Reflection>::Field>) {}
 
 fn main() {
     let mut t: Test = Default::default();
 
-    let f = t.get_field("abc");
-    dbg!(f);
-    let f = t.get_field("string");
-    dbg!(f);
-    let f = t.get_field("double");
-    dbg!(f);
-    let f = t.get_field("rec");
-    dbg!(&f);
-    println!();
-    let f = t.get_field("rec");
-    dbg!(f);
     println!();
     dbg!(&t);
     println!();
-    dbg!(t.get_field_list());
+    dbg!(Test::get_field_list());
     dbg!(&t);
     t.update_with_str("inner abc d").unwrap();
     t.update_with_str("string abc").unwrap();
