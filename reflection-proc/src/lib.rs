@@ -6,6 +6,7 @@ use syn::*;
 mod enum_from_strings;
 mod fields_from_strings;
 mod reflection;
+mod reflection_string;
 mod update_with_str;
 
 #[proc_macro_derive(FieldsFromStrings)]
@@ -37,6 +38,18 @@ pub fn proc_macro_reflection(input: TokenStream) -> TokenStream {
     let DeriveInput { ident, data, .. } = parse_macro_input!(input as DeriveInput);
     match data {
         Data::Struct(s) => reflection::generate(ident, s),
+        _ => {
+            ident.span().unwrap().error("struct expected").emit();
+            "".parse().unwrap()
+        }
+    }
+}
+
+#[proc_macro_derive(ReflectionString)]
+pub fn proc_macro_reflection_string(input: TokenStream) -> TokenStream {
+    let DeriveInput { ident, data, .. } = parse_macro_input!(input as DeriveInput);
+    match data {
+        Data::Struct(s) => reflection_string::generate(ident, s),
         _ => {
             ident.span().unwrap().error("struct expected").emit();
             "".parse().unwrap()

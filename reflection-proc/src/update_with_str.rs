@@ -12,26 +12,25 @@ pub fn generate(ident: Ident, s: DataStruct) -> TokenStream {
 
     quote::quote!(
         impl UpdateWithStr for #ident {
-            type Err = String;
-
-            fn update_with_str(&mut self, s: &str) -> Result<(), Self::Err> {
+            fn update_with_str(&mut self, s: &str) -> Result<(), UpdateWithStrErr> {
                 match s.find(|c: char| c.is_whitespace()) {
                     Some(pos) => {
                         match &s[..pos] {
                             #(#res_ident_str => {
                                 match s[pos..].trim() {
-                                    "" => Err("list of args is ended".to_string()),
-                                    s => self.#res_ident.update_with_str(s).map_err(|e| e.to_string())
+                                    "" => Err(UpdateWithStrErr::WrongFieldName),
+                                    s => self.#res_ident.update_with_str(s),
                                 }
                             }),*
-                            _ => Err(format!("wrong field name `{}`", &s[..pos]))
+                            _ => Err(UpdateWithStrErr::WrongFieldName)
                         }
                     }
-                    None => Err("cannot find value (split by whitespace".to_string())
+                    None => Err(UpdateWithStrErr::WrongFieldName)
                 }
             }
         }
-    ).into()
+    )
+    .into()
 }
 
 #[derive(Debug, Clone)]

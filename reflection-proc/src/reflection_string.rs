@@ -11,16 +11,31 @@ pub fn generate(ident: Ident, s: DataStruct) -> TokenStream {
     let res_ident_str: Vec<_> = named.iter().map(|f| f.id.to_string()).collect();
 
     quote::quote!(
-        impl Reflection for #ident {
+        impl ReflectionString for #ident {
+            fn get_field_list() -> Vec<&'static str> {
+                vec![#(#res_ident_str),*]
+            }
+
             fn get_field_string(&self, name: &str) -> Result<String, ()> {
                 match name {
                     #(#res_ident_str => Ok(format!("{:?}", self.#res_ident)),)*
                     _ => Err(()),
                 }
-            }
-
-            fn get_field_list() -> Vec<&'static str> {
-                vec![#(#res_ident_str),*]
+                // TODO: make it possible (for example, add #[defer]).
+                // match name.find(|c: char| c.is_whitespace()) {
+                //     Some(pos) => {
+                //         match &name[..pos] {
+                //             #(#res_ident_str => {
+                //                 match s[pos..].trim() {
+                //                     "" => Ok(format!("{:?}",self.#res_ident.to_string())),
+                //                     s => self.#res_ident.get_field_string(s[pos..])
+                //                 }
+                //             }),*
+                //             _ => Err(())
+                //         }
+                //     }
+                //     None => Err(())
+                // }
             }
         }
     )
